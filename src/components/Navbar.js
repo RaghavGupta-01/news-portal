@@ -9,7 +9,6 @@ const Navbar = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        console.log(searchTerm);
         dispatch(setSearchQuery(searchTerm));
     };
 

@@ -12,13 +12,14 @@ const Home = () => {
     articles,
     categories,
     selectedCategory,
+    searchTerm,
     currentPage,
     status,
     error
   } = useSelector((state) => state.news);
 
   useEffect(() => {
-    dispatch(fetchNews({ category: selectedCategory, page: currentPage }));
+    dispatch(fetchNews({q: searchTerm, category: selectedCategory, page: currentPage }));
   }, [dispatch, selectedCategory, currentPage]);
 
   const handleCategoryChange = (category) => {
@@ -45,7 +46,7 @@ const Home = () => {
         )}
         {status === 'failed' && <p className="alert alert-danger">{error}</p>}
         {status === 'succeeded' &&
-          <NewsList articles={articles}
+          <NewsList articles={articles} searchTerm={searchTerm}
           />}
         <div className="pagination-container">
           <Pagination />

@@ -6,11 +6,12 @@ const BASE_URL = 'https://newsapi.org/v2';
 
 export const fetchNews = createAsyncThunk(
     'news/fetchNews',
-    async ({ category = '', page = 1, pageSize = 6 }, { rejectWithValue }) => {
+    async ({ searchQuery = '', category = '', page = 1, pageSize = 6 }, { rejectWithValue }) => {
         try {
             const response = await axios.get(`${BASE_URL}/top-headlines`, {
                 params: {
                     country: 'us',
+                    q: searchQuery,
                     category: category || undefined,
                     page,
                     pageSize: pageSize * 2,
@@ -39,7 +40,7 @@ const newsSlice = createSlice({
         articles: [],
         categories: ['business', 'entertainment', 'general', 'health', 'science', 'sports', 'technology'],
         selectedCategory: '',
-        searchQuery: '',
+        searchTerm: '',
         currentPage: 1,
         totalResults: 0,
         totalPages: 1,
@@ -67,7 +68,7 @@ const newsSlice = createSlice({
             .addCase(fetchNews.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 const validArticles = action.payload.articles.filter(isValidArticle);
-                state.articles = validArticles.slice(0, state.pageSize); 
+                state.articles = validArticles.slice(0, state.pageSize);
                 state.totalResults = action.payload.totalResults;
                 state.totalPages = Math.ceil(action.payload.totalResults / state.pageSize);
             })
